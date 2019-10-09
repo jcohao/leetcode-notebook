@@ -49,9 +49,36 @@ class ConbinationSum {
         }
     }
 
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(candidates);
+        backtrack(result, new ArrayList<Integer>(), candidates, 0, target);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> subArray, int[] candidates, int start, int target) {
+        if (target == 0) {
+            // 每次加进去的是重新创建的数组
+            result.add(new ArrayList(subArray));
+        } else {
+            for (int i = start; i < candidates.length; i++) {
+                // List<Integer> temp = new ArrayList<>(subArray);
+                // temp.add(candidates[i]);
+                // backtrack(result, temp, candidates, i, target - candidates[i]);
+
+                // 大于 target 的数就加不进去了
+                if (candidates[i] > target) return;
+                subArray.add(candidates[i]);
+                backtrack(result, subArray, candidates, i, target - candidates[i]);
+                // 这样就不用每次都创建临时数组，每次回溯回来会删掉最后一次加进去的元素
+                subArray.remove(subArray.size() - 1);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         ConbinationSum solution = new ConbinationSum();
-        int[] nums = {1,2,3};
-        System.out.println(solution.combinationSum(nums, 8).toString());
+        int[] nums = {2,3,6,7};
+        System.out.println(solution.combinationSum2(nums, 7).toString());
     }
 }

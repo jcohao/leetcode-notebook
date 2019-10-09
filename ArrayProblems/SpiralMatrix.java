@@ -14,7 +14,7 @@ class SpiralMatrix {
      */
     public List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> result = new ArrayList<>();
-        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0)
+        if (matrix == null || matrix.length == 0)
             return result;
 
         int beginRow = 0, beginCol = 0;
@@ -48,6 +48,48 @@ class SpiralMatrix {
         return result;
     }
 
+    /**
+     * 另外一种方法是利用标记的方法，用一个二维数组去记录哪些节点是已经访问过的
+     * 用向量去记录行走的方向，(a, b) a 表示上（-1）下（1）b 表示左（-1）右（1）
+     * 
+     */
+    public List<Integer> spiralOrder2(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0) 
+            return result;
+
+        int Row = matrix.length, Col = matrix[0].length;
+        int r = 0, c = 0;
+        // 方向向量
+        int[] dr = {0, 1, 0, -1};
+        int[] dc = {1, 0, -1, 0};
+        // di 是决定方向的变量
+        int di = 0;
+
+        boolean[][] memo = new boolean[Row][Col];
+
+        for (int i = 0; i < Row * Col; i++) {
+            result.add(matrix[r][c]);
+            memo[r][c] = true;
+
+            // 下一个位置
+            int cr = r + dr[di];
+            int cc = c + dc[di];
+
+            if (cr >= 0 && cr < Row && cc >= 0 && cc < Col && !memo[cr][cc]) {
+                r = cr;
+                c = cc; 
+            } else {
+                di = (di + 1) % 4;
+                r += dr[di];
+                c += dc[di];
+            }
+        }
+
+        return result;
+    }
+    
+
 
     public static void main(String[] args) {
         SpiralMatrix solution = new SpiralMatrix();
@@ -58,6 +100,6 @@ class SpiralMatrix {
             {9,10,11}
         };
 
-        System.out.println(solution.spiralOrder(matrix).toString());
+        System.out.println(solution.spiralOrder2(matrix).toString());
     }
 }

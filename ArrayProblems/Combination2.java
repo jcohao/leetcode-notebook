@@ -26,22 +26,29 @@ class Combination2 {
         int[] candidates, int target) {
             // 应该先判断target是否等于 0，不然刚好所有值加起来等于target则会加不进result中
             if (target == 0) {
-                result.add(subArray);
+                result.add(new ArrayList<>(subArray));
             } else {
+                // for (int i = index; i < candidates.length; i++) {
+                //     // 当 i 不为 index 时，且前后两个遍历的数相等，则跳过，可以去掉重复的项
+                //     if (i > index && candidates[i - 1] == candidates[i]) continue;
+                //     List<Integer> newSubArray = new ArrayList<>(subArray);
+                //     if (candidates[i] <= target) {
+                //         newSubArray.add(candidates[i]);
+                //         // 自身不能用重复次，所以这里传入的索引次数应该为 i+1，从自己的下一位开始遍历
+                //         backtracking(result, newSubArray, i+1, candidates, target-candidates[i]);
+                //     } else {
+                //         // 大于的话就直接返回了，之后的值也用不了了
+                //         return;
+                //     }   
+                // }
+
                 for (int i = index; i < candidates.length; i++) {
-                    // 当 i 不为 index 时，且前后两个遍历的数相等，则跳过，可以去掉重复的项
-                    if (i > index && candidates[i - 1] == candidates[i]) continue;
-                    List<Integer> newSubArray = new ArrayList<>(subArray);
-                    if (candidates[i] <= target) {
-                        newSubArray.add(candidates[i]);
-                        // 自身不能用重复次，所以这里传入的索引次数应该为 i+1，从自己的下一位开始遍历
-                        backtracking(result, newSubArray, i+1, candidates, target-candidates[i]);
-                    } else {
-                        // 大于的话就直接返回了，之后的值也用不了了
-                        return;
-                    }
-                    
-                    
+                    if (i > index && candidates[i - i] == candidates[i]) continue;
+                    else if (candidates[i] > target) return;
+
+                    subArray.add(candidates[i]);
+                    backtracking(result, subArray, i + 1, candidates, target - candidates[i]);
+                    subArray.remove(subArray.size() - 1);
                 }
             }
     }
