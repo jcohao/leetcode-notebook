@@ -37,8 +37,38 @@ class GenerateParentheses {
     }
 
 
+    public List<String> generateParenthesis2(int n) {
+        List<String> result = new ArrayList<>();
+        char[] str = new char[2*n];
+        backtracking(result, str, 0, 0, n);
+
+        return result;
+    }
+
+    private void backtracking(List<String> result, char[] str, int left, int right, int n) {
+        // System.out.println(str.length);
+        // 这里不能用 str 数组的长度来判断，因为数组的长度为定长
+        int len = left + right;
+        if (len == 2*n) {
+            result.add(String.valueOf(str));
+            return;
+        } 
+
+        if (left - right > 0) {
+            str[len] = ')';
+            backtracking(result, str, left, right + 1, n);
+        } 
+
+        if (left < n) {
+            str[len] = '(';
+            backtracking(result, str, left + 1, right, n);
+
+        }
+    }
+
+
     public static void main(String[] args) {
         GenerateParentheses solution = new GenerateParentheses();
-        System.out.println(solution.generateParenthesis(3).toString());
+        System.out.println(solution.generateParenthesis2(3).toString());
     }
 }
