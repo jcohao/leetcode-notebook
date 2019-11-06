@@ -134,6 +134,65 @@ class SudokuSolver {
 
 
 
+
+
+    char[] numbers = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    boolean[][] ROW = new boolean[9][9];
+    boolean[][] COL = new boolean[9][9];
+    boolean[][] NINE = new boolean[9][9];
+
+
+    public void solveSudoku2(char[][] board) {
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board[r][c] != '.') {
+                    int num = board[r][c] - '1';
+                    ROW[r][num] = COL[c][num] = NINE[r/3*3 + c/3][num] = true;
+                }
+            }
+        } 
+
+
+        backtracking(board, 0, 0);
+    }
+
+    private boolean backtracking(char[][] board, int row, int col) {
+        if (row == 9) {
+            return true;
+        } else if (col == 9) {
+            return backtracking(board, row + 1, 0);
+        }
+
+
+        if (board[row][col] != '.') {
+            return backtracking(board, row, col+1);
+        } else {
+            for (char number : numbers) {
+                int num = number - '1';
+                if (ROW[row][num] || COL[col][num] || NINE[row/3*3 + col/3][num]) {
+                    continue;
+                } else {
+                    ROW[row][num] = COL[col][num] = NINE[row/3*3 + col/3][num] = true;
+                    board[row][col] = number;
+                    if (!backtracking(board, row, col+1)) {
+                        // 必须得改回来，因为可能之前就填错了，导致这一层一个能匹配的都没有，仍然要回到
+                        // 之前的地方去修改
+                        board[row][col] = '.';
+                        ROW[row][num] = COL[col][num] = NINE[row/3*3 + col/3][num] = false;
+                        continue;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+
+            // numbers 里面的数字都试完了，就说明没有数字匹配，返回到上一层去修改
+            return false;
+        }
+
+    }
+
     public static void main(String[] args) {
         char[][] board = {
             {'5','3','.','.','7','.','.','.','.'},

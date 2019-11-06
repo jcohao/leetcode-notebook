@@ -137,6 +137,8 @@ class SubstringwithConcatenation {
 
         int wordNum = words.length;
         int wordLength = words[0].length();
+
+        // 后面用的多的变量可先算出来，不然每次要用都得计算就很浪费空间
         int substrLength = wordNum * wordLength;
 
         for (String word : words) {
