@@ -62,6 +62,13 @@ class SubarraysWithKDifferentInteger {
         return result;
     }
 
+    public int subarraysWithKDistinct3(int[] A, int K) {
+        // 要求只有 K 个不同数字组成的子数组的个数
+        // 需要知道：最多 K - 1 个不同数字的子数组组合数 + 只有 K 个不同数字组成的子数组的个数
+        //                  = 最多 K 个不同数字的子数组组合数
+        return atMostK(A, K) - atMostK(A, K - 1);
+    }
+
 
     public int atMostK(int[] A, int K) {
         int i = 0, res = 0;
@@ -76,17 +83,59 @@ class SubarraysWithKDifferentInteger {
                 if (count.get(A[i]) == 0) K++;
                 i++;
             }
+            // 长度相当于当前 j 指向的元素与之前的数字的组合数
             res += j - i + 1;
         }
 
         return res;
     }
 
+
+    public int subarraysWithKDistinct4(int[] A, int K) {
+        int result = 0;
+        if (A == null || A.length == 0) return result;
+
+        // 这里如果有一个数字是比 A.length 还要大的话数组就越界了
+        // 还是改用 HashMap 吧
+        int[] counts = new int[A.length + 1];
+        int left = 0, countDist = 0, combNum = 1;
+
+        for (int right = 0; right < A.length; right++) {
+            if (counts[A[right]]++ == 0) countDist++;
+
+            while (countDist > K) {
+                if (--counts[A[left]] == 0) countDist--;
+                left++;
+                // 循环退出的条件时 countDist == K，此时子数组不同数字的个数刚好为 K
+                // 这时候的子数组算一个组合数
+                combNum = 1;
+            }
+
+            if (countDist == K) {
+                // 当 left 所指的数字数目大于 1
+                // 即时将该数字排除掉，也是满足题意的一个子数组
+                // 所以组合数加 1
+                while (counts[A[left]] > 1) {
+                    combNum++;
+                    counts[A[left]]--;
+                    left++;
+                }
+
+                result += combNum;
+            }
+        }
+
+        return result;
+    }
+
+
+
     public static void main(String[] args) {
         SubarraysWithKDifferentInteger solution = new SubarraysWithKDifferentInteger();
 
-        int[] A = {1,2,1,2,3};
+        int[] A = {27,27,43,28,11,20,1,4,49,18,37,31,31,7,3,31,50,6,50,46,4,13,31,49,15,52,25,31,35,4,11,50,40,1,49,14,46,16,11,16,39,26,13,4,37,39,46,27,49,39,49,50,37,9,30,45,51,47,18,49,24,24,46,47,18,46,52,47,50,4,39,22,50,40,3,52,24,50,38,30,14,12,1,5,52,44,3,49,45,37,40,35,50,50,23,32,1,2};
+        
 
-        System.out.println(solution.atMostK(A, 1));
+        System.out.println(solution.subarraysWithKDistinct4(A, 20));
     }
 }

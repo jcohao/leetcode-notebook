@@ -103,7 +103,7 @@ class TrapingRainWater {
     }
 
     /**
-     * 找出每一格左边最大的以及右边最大的，又这二者的较小者决定这一格能容纳多少水量
+     * 找出每一格左边最大的以及右边最大的，由这二者的较小者决定这一格能容纳多少水量
      * 顺序遍历一次数组，找出每一格左边最大的元素，存到数组里
      * 逆序遍历一次数组，找出每一格右边最大的元素，存到数组里
      * 然后遍历数组，计算存水量
@@ -172,6 +172,38 @@ class TrapingRainWater {
 
         return total;
     }
+
+
+    /**
+     * 这种方法其实也是找每一格左右最高的值，但这种方法不太优雅，但也能解决问题吧
+     */
+    public int trap5(int[] height) {
+        int result = 0;
+        if (height == null || height.length == 0) return result;
+        int leftMax = 0, rightMax = 0, rightMost = 0;
+        for (int i = 0; i < height.length - 1; i++) {
+            
+            if (i == rightMost) {
+                rightMax = 0;
+                for (int j = i + 1; j < height.length; j++) {
+                    if (height[j] > rightMax) {
+                        rightMax = height[j];
+                        rightMost = j;
+                    }
+                        
+                }
+            }
+
+            leftMax = Math.max(height[i], leftMax);
+
+            if (Math.min(leftMax, rightMax) > height[i]) {
+                result += Math.min(leftMax, rightMax) - height[i];
+            }
+    
+        }
+
+        return result;
+     }
 
     public static void main(String[] args) {
         int[] nums = {5,2,1,2,1,5};

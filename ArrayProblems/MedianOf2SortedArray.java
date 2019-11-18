@@ -1,4 +1,4 @@
-class Solution {
+class MedianOf2SortedArray {
     /**
      * 如果将两个有序数组先合并到一起再去找中位数的话
      * 虽然简单，但是不满足题目所要求的时间复杂度为O(log(m + n))
