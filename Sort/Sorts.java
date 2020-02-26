@@ -31,6 +31,7 @@ public class Sorts {
      *          然后找剩下元素中最小的元素，与第二个元素交换，以此类推
      * 时间复杂度为 O(n*n) 空间复杂度为 O(1)
      * 没有利用到输入的初始状态，即顺序的数组和乱序的数组所花的时间是差不多的
+     * 选择排序是不稳定的，例子 {5, 8, 5, 2, 9}
      */
     public static void selectionSort(Comparable[] a) {
         if (a == null || a.length == 0) return;
@@ -51,6 +52,7 @@ public class Sorts {
      *          后面的元素往后挪动
      * 对应部分有序的数组很有效
      * 时间复杂度为 O(n*n) 空间复杂度为 O(1)
+     * 插入排序涉及两两相邻的元素相交，是稳定的
      */
     public static void insertionSort(Comparable[] a) {
         if (a == null || a.length == 0) return;
@@ -62,6 +64,26 @@ public class Sorts {
         }
     } 
 
+
+    /**
+     * 冒泡排序：双层循环遍历数组，外层循环遍历每一个元素，内层循环作比较，
+     * 如果相邻两个元素后一个比前一个要小则交换位置，直到不能交换位置位置，
+     * 则每一次将把该轮最大的元素往数组尾部推到正确的位置
+     * 冒泡排序跟插入排序很相似，但是区别在于，插入排序在排序过程中形成的
+     * 局部有序序列不一定与最后排序结果相同，而冒泡排序每次冒出的都是数组
+     * 中当前轮的最大或最小元素
+     * 时间复杂度 O(n*n) 空间复杂度 O(1)
+     * 冒泡排序也是稳定的
+     */
+    public static void bubbleSort(Comparable[] a) {
+        if (a == null || a.length == 0) return;
+
+        for (int i = 1; i < a.length; i++) {
+            for (int j = 0; j < a.length - i; j++) {
+                if (less(a[j+1], a[j])) exch(a, j, j+1);
+            }
+        }
+    }
 
     /**
      * 希尔排序：基于插入排序，每次将间隔为 h 的元素进行局部排序，最终用插入排序将局部有序的数组进行排序
@@ -143,6 +165,7 @@ public class Sorts {
     /**
      * 快速排序：每次把小于等于切分元素的排到切分元素前面，把大于它的排在它后面
      * 时间复杂度为 O(NlogN) 空间复杂度为 O(1)
+     * 快速排序是不稳定的
      */
     public static void quickSort(Comparable[] a) {
         quickSort(a, 0, a.length - 1);
@@ -176,10 +199,132 @@ public class Sorts {
     }
 
 
+    /**
+     * 堆排序：一棵完全二叉树，具体分为小顶堆和大顶堆，这里用小顶堆为例，父节点的值不大于左右子树的值
+     * 简单的堆实现用数组来实现，k 位置的元素不大于 2k + 1 和 2k + 1 位置的值
+     * 每次将堆顶元素 poll 出，然后调整堆的顺序
+     * 堆排序是不稳定的
+     */
+    public static void heapSort(Comparable[] a) {
+        if (a == null || a.length == 0) return;
+
+        // 堆的创建
+        Comparable[] heap = createHeap(a);
+
+
+        // 循环 poll 出堆中元素，然后调整堆内元素的顺序
+        int index = 0;
+
+        while (index < a.length) {
+            a[index] = heap[0];
+            sink(heap, index);
+            index++;
+        }
+    }
+
+    private static Comparable[] createHeap(Comparable[] a) {
+        // 堆的创建要用上浮操作
+        Comparable[] heap = new Comparable[a.length];
+
+        int index = 0;
+
+        for (Comparable item : a) {
+            heap[index] = item;
+            rise(heap, index);
+            index++;
+        }
+
+        return heap;
+    }
+
+    private static void rise(Comparable[] heap, int index) {
+        int pIndex = index % 2 == 0 ? index/2 - 1 : index/2;
+
+        while (pIndex >= 0 && !less(heap[pIndex], heap[index])) {
+            exch(heap, pIndex, index);
+            index = pIndex;
+            pIndex = index % 2 == 0 ? index/2 - 1 : index/2;
+        }
+    }
+
+    private static void sink(Comparable[] heap, int index) {
+        if (index == heap.length - 1) return;
+
+        int bound = heap.length - index - 1;
+        int cur = 0;
+        heap[0] = heap[bound];
+
+        while (cur < bound) {
+            if (2*cur + 1 < bound && 2*cur + 2 < bound) {
+                if (less(heap[2*cur+2], heap[2*cur+1])) {
+                    exch(heap, 2*cur+1, 2*cur+2);
+                }
+            }
+
+            if (2*cur + 1 < bound && !less(heap[cur], heap[2*cur+1])) {
+                exch(heap, cur, 2*cur+1);
+                cur = 2*cur + 1;
+            } else {
+                break;
+            }
+        }
+    }
+
+    /**
+     * 基数排序：分桶进行排序，在数值上有 LSD 和 MSD 
+     * LSD 是从最低位开始，而 MSD 则是从最高位开始
+     * 以下用 LSD 做例子对数值数组排序
+     */
+    public static void lsdSort(int[] arr) {
+        if (arr == null || arr.length == 0) return;
+
+        int max = Integer.MIN_VALUE;
+
+        for (int a : arr) {
+            max = Math.max(max, a);
+        }
+
+        // 找出最大的数是多少位的
+        int count = 0;
+        while (max != 0) {
+            max /= 10;
+            count++;
+        }
+
+        // 每次排序所用的桶
+        int[][] bin = new int[10][arr.length];
+        // 记录桶中装了多少元素
+        int[] memo = new int[10];
+
+        for (int i = 0; i < count; i++) {
+            int lsd = (int) Math.pow(10, i);
+
+            for (int a : arr) {
+                int pos = (a / lsd) % 10;
+                bin[pos][memo[pos]++] = a;  
+            }
+
+            int index = 0;
+            for (int j = 0; j < 10; j++) {
+                for (int k = 0; k < memo[j]; k++) {
+                    arr[index++] = bin[j][k];
+                }
+
+                memo[j] = 0;
+            }
+        }
+
+
+    }
+
+
+
     public static void main(String[] args) {
-        Integer[] nums = {5, 4, 2, 1, 8};
-        Sorts.quickSort(nums);
-        Sorts.show(nums);
+        int[] nums = {9, 4, 2, 2, 1, 8};
+        Sorts.lsdSort(nums);
+        for (int a : nums) {
+            System.out.print(a + " ");
+        }
     }
 
 }
