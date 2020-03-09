@@ -79,7 +79,7 @@ class FlattenBT2LinkedList {
         while (root != null) {
             if (root.left != null) {
                 TreeNode p = root.left;
-                while (p.right) {
+                while (p.right != null) {
                     p = p.right;
                 }
 

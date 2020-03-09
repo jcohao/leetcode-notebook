@@ -80,7 +80,7 @@ class PopulatingNextRightPointers2 {
         if (root.right != null) root.right.next = p;
         if (root.left != null) root.left.next = (root.right == null) ? p : root.right;
 
-        // 必须先迭代右子树
+        // 必须先迭代右子树，不然左子树想通过 next 去遍历下一个节点却发现 next 还没有连上
         connect(root.right);
         connect(root.left);
         

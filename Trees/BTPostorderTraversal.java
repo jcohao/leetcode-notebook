@@ -22,17 +22,17 @@ class BTPostorderTraversal {
         LinkedList<Integer> result = new LinkedList<>();
         if (root == null) return result;
 
-        Deque<TreeNode> stack = new ArrayDeque<>();
+        Deque<TreeNode> deque = new ArrayDeque<>();
 
         TreeNode p = root;
 
-        while (!stack.isEmpty() || p != null) {
+        while (!deque.isEmpty() || p != null) {
             if (p != null) {
-                stack.push(p);
+                deque.push(p);
                 result.addFirst(p.val);
                 p = p.right;
             } else {
-                TreeNode node = stack.pop();
+                TreeNode node = deque.pop();
                 p = node.left;
             }
         }

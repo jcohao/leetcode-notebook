@@ -24,11 +24,14 @@ class BTInorderTraversal {
         return result;
     }
 
-    private Stack<TreeNode> stack = new Stack<>();
-    // 非递归
+    /**
+     * 利用栈的非递归遍历
+     * 时间复杂度和空间复杂度都为 O(n)
+     */
     public List<Integer> inorderTraversal2(TreeNode root) {
         if (root == null) return result;
         TreeNode cur = root;
+        Stack<TreeNode> stack = new Stack<>();
 
         while (!stack.empty() || cur != null) {
             while (cur != null) {

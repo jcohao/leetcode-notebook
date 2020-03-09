@@ -38,4 +38,24 @@ class BTPreorderTraversal {
 
         return result;
     }
+
+    public List<Integer> preorderTraversal3(TreeNode root) {
+        if (root == null) return result;
+
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode p = root;
+        while (!stack.isEmpty() || p != null) {
+            if (p != null) {
+                stack.push(p);
+                result.add(p.val);
+                p = p.left;
+            } else {
+                TreeNode node = stack.pop();
+                p = node.right;
+            }
+        }
+
+        return result;
+    }
 }
