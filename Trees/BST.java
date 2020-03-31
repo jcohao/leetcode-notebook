@@ -96,8 +96,11 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Node floor(Node x, Key key) {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
+        // 如果是等于，则就是所要找的节点
         if (cmp == 0) return x;
+        // 如果是小于，则需要找的节点在左子树上
         if (cmp < 0) return floor(x.left, key);
+        // 如果是大于，则需要找的节点可能在右子树上，如果找不到则为 x
         Node t = floor(x.right, key);
         if (t != null) return t;
         else return x;
@@ -128,8 +131,12 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Node select(Node x, int k) {
         if (x == null) return null;
         int t = size(x.left);
+        // t > k 则需要找的节点在左子树中
         if (t > k) return select(x.left, k);
+        // t < k 则需要找的节点在右子树中，找右子树中排名为 k-t-1 的节点
+        // k-t-1  t (左子树节点数)  1 (根结点)
         else if (t < k) return select(x.right, k-t-1);
+        // t == k 则返回当前节点
         else return x;
     }
 
@@ -138,6 +145,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
 
     // 返回以 x 为根结点的子树小于 x.key 的键的数量
+    // 这里第一个节点或者为空节点都返回顺序 0
     private int rank(Key key, Node x) {
         if (x == null) return 0;
         int cmp = key.compareTo(x.key);
@@ -162,6 +170,8 @@ public class BST<Key extends Comparable<Key>, Value> {
         root = delete(root, key);
     }
 
+    // 使用被删除节点的右子树中的最小节点来替换
+    // 这种方法的删除不能保证树的对称性
     private Node delete(Node x, Key key) {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);

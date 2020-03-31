@@ -24,9 +24,29 @@ class Subsets {
         }
     }
 
+    public List<List<Integer>> subsets2(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        int n = nums.length;
+        int nthBit = 1 << n;
+
+        for (int i = 0; i < Math.pow(2, n); i++) {
+            String bitmask = Integer.toBinaryString(i | nthBit).substring(1);
+            List<Integer> subset = new ArrayList<>();
+            for (int j = 0; j < bitmask.length(); j++) {
+                if (bitmask.charAt(j) == '1') {
+                    subset.add(nums[j]);
+                }
+            }
+            result.add(subset);
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         Subsets solution = new Subsets();
         int[] nums = {1,2,3};
-        System.out.println(solution.subsets(nums).toString());
+        System.out.println(solution.subsets2(nums).toString());
     }
 }
