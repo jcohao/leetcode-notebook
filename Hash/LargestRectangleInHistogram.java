@@ -32,9 +32,6 @@ class LargestRectangleInHistogram {
 
     /**
      * 遍历整个数组，当遇到的是递增序列的时候，这个序列的右边界作为起点，往前去计算面积，最后一个数组元素也是如此操作
-     * 比如 2 4 6 递增序列，就没必要从 2 或 4 的时候开始算，因为 2 或 4 开始算会得到 2 4 4 三种可能面积，而从 6 开始算则是 6 8 6 肯定比 2 4 4 要大
-     * 而递减序列为什么不要算，比如 1 6 5 1 2 3, 其实遇到下一个是大于现在这个值的都要执行以上的操作，
-     * 跟递增递减好像没什么关系
      */
     public int largestRectangleArea2(int[] heights) {
         if (heights == null || heights.length == 0) return 0;
@@ -42,9 +39,10 @@ class LargestRectangleInHistogram {
         int maxArea = 0;
 
         for (int cur = 0; cur < heights.length; cur++) {
+            // 找到递增序列的最高点
             if (cur == heights.length - 1 || heights[cur] > heights[cur+1]) {
                 int minHeight = heights[cur];
-
+                // 然后往前计算最大的面积
                 for (int i = cur; i >= 0; i--) {
                     minHeight = Math.min(minHeight, heights[i]);
                     maxArea = Math.max(maxArea, minHeight * (cur - i + 1));
@@ -70,7 +68,7 @@ class LargestRectangleInHistogram {
             if (stack.isEmpty() || heights[i] >= heights[stack.peek()]) {
                 stack.add(i);
             } else {
-                // 当前遍历值是大于栈顶所指元素的值，则找到右边界，右边界则是当前遍历的值
+                // 当前遍历值是小于栈顶所指元素的值，则找到右边界，右边界则是当前遍历的值
                 int rightBorder = i;
                 // 弹出来的是要处理位置所对应的高度
                 int cur = stack.pop();

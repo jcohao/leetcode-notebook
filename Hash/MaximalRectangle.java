@@ -13,6 +13,8 @@ class MaximalRectangle {
      * 
      * 每遍历完一行都计算 res = (rights[c] - lefts[c]) * heights[c]
      * 
+     * 
+     * 
      * heights:
      * [1, 0, 1, 0, 0]
      * [2, 0, 2, 1, 1]
@@ -52,12 +54,13 @@ class MaximalRectangle {
                 if (matrix[r][c] == '0') heights[c] = 0;
                 else heights[c] += 1;
             }
-            // System.out.println("heights: " + Arrays.toString(heights));
+            System.out.println("heights: " + Arrays.toString(heights));
 
             // 左边界
             int leftCur = 0;
             for (int c = 0; c < n; c++) {
                 if (matrix[r][c] == '1') {
+                    // 上一层的值会对这一层的值有限制
                     lefts[c] = Math.max(lefts[c], leftCur);
                 } else {
                     lefts[c] = 0;

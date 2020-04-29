@@ -317,11 +317,48 @@ public class Sorts {
 
     }
 
+    public static void msdSort(int[] arr) {
+        if (arr == null || arr.length < 2) return;
+
+        int max = Integer.MIN_VALUE;
+
+        for (int a : arr) {
+            max = Math.max(max, a);
+        }
+
+        int count = String.valueOf(max).length();
+
+        int[][] bin = new int[10][arr.length];
+
+        int[] memo = new int[10];
+
+        for (int a : arr) {
+            int index = (int) (a / Math.pow(10, count-1));
+            bin[index][memo[index]++] = a;
+        }
+
+        int k = 0;
+        for (int i = 0; i < 10; i++) {
+            if (memo[i] == 0) continue;
+            int[] tmp = new int[memo[i]];
+            for (int j = 0; j < memo[i]; j++) {
+                tmp[j] = bin[i][j];
+            }
+
+            msdSort(tmp);
+            for (int j = 0; j < tmp.length; j++) {
+                arr[k++] = tmp[j];
+            }
+        }
+
+        
+    }
+
 
 
     public static void main(String[] args) {
-        int[] nums = {9, 4, 2, 2, 1, 8};
-        Sorts.lsdSort(nums);
+        int[] nums = {432, 2, 10, 8};
+        Sorts.msdSort(nums);
         for (int a : nums) {
             System.out.print(a + " ");
         }

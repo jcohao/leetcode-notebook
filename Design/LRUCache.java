@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 class Node {
     int key;
@@ -89,8 +90,6 @@ class LRUCache {
     private void removeNode(Node node) {
         node.next.pre = node.pre;
         node.pre.next = node.next;
-
-
     }
 
 
@@ -104,3 +103,25 @@ class LRUCache {
         System.out.println(cache.get(2));
     }
 }
+
+
+
+// class LRUCache {
+//     private LinkedHashMap<Integer, Integer> map;
+
+//     LRUCache(int capacity) {
+//         map = new LinkedHashMap<>(capacity, 0.75f, true) {
+//             protected boolean removeEldestEntry(Map.Entry eldest) {
+//                 return size() > capacity;
+//             }
+//         };
+//     }
+
+//     public int get(int key) {
+//         return map.getOrDefault(key, -1);
+//     }
+
+//     public void put(int key, int value) {
+//         map.put(key, value);
+//     }
+// }
