@@ -68,21 +68,70 @@ class BestTimeToBuyAndSellStockIII {
         return maxResult;
     }
 
+    /**
+     * dp[k, i] = max(dp[k, i-1], prices[i] - prices[j] + dp[k-1])
+     * 对于第 k 次交易，在第 i 天
+     * 如果不交易，则是 dp[k, i-1]
+     * 如果交易，则为 prices[i] - prices[j] + dp[k-1] j = [0...i)
+     * 
+     * 时间复杂度为 O(kn^2) 空间复杂度为 O(kn)
+     */
+    public int maxProfitDP(int[] prices) {
+        if (prices == null || prices.length < 1) return 0;
+
+        int[][] dp = new int[3][prices.length];
+
+        for (int k = 1; k <= 2; k++) {
+            for (int i = 1; i < prices.length; i++) {
+                // 第 i 天的交易得找 0 ~ i-1 之前股价最小的一天
+                int min = prices[0];
+                for (int j = 1; j < i; j++) {
+                    // 股价最小的一天还跟在这一天之前的一趟交易有关，如果这一天的金额减去这一天之前交易的金额
+                    // 为最小的话，那么在这一天买入股票时最佳的
+                    min = Math.min(min, prices[j] - dp[k-1][j-1]);
+                }
+                // 第 i 天要不不做交易，要不卖出股票
+                dp[k][i] = Math.max(dp[k][i-1], prices[i] - min);
+            }
+        }
+
+        return dp[2][prices.length-1];
+    }
+
+    /**
+     * 以上 DP 解法 min 的计算是重复了的，经过简化之后时间复杂度变为 O(kn)
+     */
+    public int maxProfitDP2(int[] prices) {
+        if (prices == null || prices.length < 1) return 0;
+
+        for (int k = 1; k <= 2; k++) {
+            int min = prices[0];
+            for (int i = 1; i < prices.length; i++) {
+                min = Math.min(min, prices[i] - dp[k-1][i-1]);
+                dp[k][i] = Math.max(dp[k][i-1], prices[i] - min);
+            }
+        }
+
+        return dp[2][prices.length-1];
+    }
+
     public int maxProfit2(int[] prices) {
         int buy1 = Integer.MIN_VALUE, sell1 = 0, buy2 = Integer.MIN_VALUE, sell2 = 0;
 
         for (int price : prices) {
             buy1 = Math.max(buy1, -price);
             sell1 = Math.max(sell1, price + buy1);
+            // 计算第二次交易时的最佳买入时间，要把第一次的交易金额给算进来
             buy2 = Math.max(buy2, sell1-price);
             sell2 = Math.max(sell2, price+buy2);
         }
 
         return sell2;
     }
+    
     public static void main(String[] args) {
         BestTimeToBuyAndSellStockIII solution = new BestTimeToBuyAndSellStockIII();
 
-        System.out.println(solution.maxProfit2(new int[]{3,2,6,5,0,3}));
+        System.out.println(solution.maxProfitDP(new int[]{3,2,6,5,0,3}));
     }
 }

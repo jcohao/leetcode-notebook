@@ -24,7 +24,7 @@ class EditDistance {
      * 当 word1[i] == word2[j] 此时 dp[i][j] = dp[i-1][j-1]
      * 当 word1[i] != word2[j]
      *      把 word1[i] 替换成 word2[j] 则 dp[i][j] = dp[i-1][j-1] + 1
-     *      在 word1 后面插入一个 word2[j] 则 dp[i][j] = dp[i][j-1] + 1
+     *      在 word1[i] 后面插入一个 word2[j] 则 dp[i][j] = dp[i][j-1] + 1
      *      把 word1[i] 删除 则 dp[i][j] = dp[i-1][j] + 1
      * 
      *      dp[i][j] = min(dp[i-1][j-1], dp[i][j-1], dp[i-1][j])
