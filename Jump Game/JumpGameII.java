@@ -26,13 +26,13 @@ class JumpGameII {
             
         }
 
-        return 0;
+        return step+1;
     }
 
     public static void main(String[] args) {
         JumpGameII solution = new JumpGameII();
 
-        int[] nums = {1,1,2,1,1};
+        int[] nums = {1,2,3};
 
         System.out.println(solution.jump(nums));
     }

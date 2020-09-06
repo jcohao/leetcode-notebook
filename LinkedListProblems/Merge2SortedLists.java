@@ -44,6 +44,34 @@ class Merge2SortedLists {
     }
 
     /**
+     * 优化版本
+     */
+    public ListNode mergeTwoLists1(ListNode l1, ListNode l2) {
+        ListNode p1 = l1, p2 = l2;
+        
+        ListNode result = new ListNode(0), cur = result;
+        
+        int num1 = 0, num2 = 0;
+        
+        while (p1 != null || p2 != null) {
+            num1 = p1 == null ? Integer.MAX_VALUE : p1.val;
+            num2 = p2 == null ? Integer.MAX_VALUE : p2.val;
+            
+            if (num1 <= num2) {
+                cur.next = new ListNode(num1);
+                p1 = p1.next;
+            } else {
+                cur.next = new ListNode(num2);
+                p2 = p2.next;
+            }
+            
+            cur = cur.next;
+        }
+        
+        return result.next;
+    }
+
+    /**
      * 递归版本
      */
     public ListNode mergeTwoLists2(ListNode l1, ListNode l2) {

@@ -81,13 +81,16 @@ public class SearchinRotatedSortedArray {
                 break;
             }
 
+            // 中间的大于右边的，说明左半边是有序的
             // if (nums[middle] > nums[end]) {
+            //      目标值落在了左半边
             //     if (nums[middle] > target && nums[start] <= target) {
             //         end = middle - 1;
             //     } else {
             //         start = middle + 1;
             //     }
             // } else {
+            //      中间值小于等于右边的，则说明右半边是有序的
             //     if (nums[middle] < target && nums[end] >= target) {
             //         start = middle + 1;
             //     } else {

@@ -32,7 +32,7 @@ class SpiralMatrix {
             endCol--;
 
             // 上面边界变化了，需要重新判定
-            if (beginCol < endCol && beginRow < endRow) {
+            if (beginCol <= endCol && beginRow <= endRow) {
                 for (int i = endCol; i >= beginCol; i--) {
                     result.add(matrix[endRow][i]);
                 }
@@ -95,11 +95,11 @@ class SpiralMatrix {
         SpiralMatrix solution = new SpiralMatrix();
 
         int[][] matrix = {
-            {1,2,3},
-            {5,6,7},
-            {9,10,11}
+            {2,5},
+            {8,4},
+            {0,-1}
         };
 
-        System.out.println(solution.spiralOrder2(matrix).toString());
+        System.out.println(solution.spiralOrder(matrix).toString());
     }
 }

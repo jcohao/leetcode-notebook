@@ -23,6 +23,6 @@ class Combinations {
 
     public static void main(String[] args) {
         Combinations solution = new Combinations();
-        System.out.println(solution.combine(4, 1).toString());
+        System.out.println(solution.combine(4, 2).toString());
     }
 }

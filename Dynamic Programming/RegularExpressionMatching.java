@@ -70,8 +70,8 @@ class RegularExpressionMatching {
     }
 
     /**
-     * DP 解法，对应以上递归的解法，将中间结果存储在了 dp 数组中
-     * 使用 dp[i, j] 记录 s[i:] 是否与 p[j:] 匹配
+     * 带 memory 的递归，对应以上递归的解法，将中间结果存储在了 dp 数组中
+     * 使用 dp[i, j] 记录 s[:i] 是否与 p[:j] 匹配
      */
     boolean memo[][];
     public boolean isMatch2(String s, String p) {
@@ -100,6 +100,9 @@ class RegularExpressionMatching {
         return ans;
     }
 
+    // 这个才是 dp 解法
+    // dp[i][j] 代表的是 s[i:] 与 p[j:] 是否匹配，需要由后往前遍历
+    // 因为前面状态的计算依赖后面的结果
     public boolean isMatch3(String s, String p) {
         boolean[][] dp = new boolean[s.length()+1][p.length()+1];
         dp[s.length()][p.length()] = true;
@@ -111,6 +114,7 @@ class RegularExpressionMatching {
                 if (j + 1 < p.length() && p.charAt(j+1) == '*') {
                     dp[i][j] = dp[i][j+2] || first_match && dp[i+1][j];
                 } else {
+                    // 这里必须要先校验 first_match 因为 i 是有可能是非法的
                     dp[i][j] = first_match && dp[i+1][j+1];
                 }
             }
@@ -122,6 +126,6 @@ class RegularExpressionMatching {
     public static void main(String[] args) {
         RegularExpressionMatching solution = new RegularExpressionMatching();
 
-        System.out.println(solution.isMatch("a", "ab*"));
+        System.out.println(solution.isMatch("mississippi", "mis*is*p*."));
     }
 }

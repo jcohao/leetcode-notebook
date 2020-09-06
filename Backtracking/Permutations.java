@@ -37,7 +37,7 @@ class Permutations {
     public static void main(String[] args) {
         Permutations solution = new Permutations();
         int[] nums = {1, 2, 3};
-        System.out.println(solution.permute2(nums).toString());
+        System.out.println(solution.permute(nums).toString());
 
     }
 }

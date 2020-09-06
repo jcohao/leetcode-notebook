@@ -49,6 +49,12 @@ class FourSum {
 
         // 外层双层循环遍历两个数
         for (int i = 0; i < nums.length - 3; i++) {
+            // 已经没有匹配的了，跳出循环
+            if (nums[i] + nums[i+1] + nums[i+2] + nums[i+3] > target) break;
+            
+            // 最大的结果也不可能等于 target，continue
+            if (nums[i] + nums[nums.length-1] + nums[nums.length-2] + nums[nums.length-3] < target) continue;
+
             if (i > 0 && nums[i] == nums[i-1]) continue;        // 去重
 
             for (int j = i + 1; j < nums.length - 2; j++) {

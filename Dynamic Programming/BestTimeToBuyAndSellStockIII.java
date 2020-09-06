@@ -104,6 +104,8 @@ class BestTimeToBuyAndSellStockIII {
     public int maxProfitDP2(int[] prices) {
         if (prices == null || prices.length < 1) return 0;
 
+        int[][] dp = new int[3][prices.length];
+
         for (int k = 1; k <= 2; k++) {
             int min = prices[0];
             for (int i = 1; i < prices.length; i++) {

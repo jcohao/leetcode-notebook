@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.Stack;
 
 class LargestRectangleInHistogram {
@@ -32,6 +33,10 @@ class LargestRectangleInHistogram {
 
     /**
      * 遍历整个数组，当遇到的是递增序列的时候，这个序列的右边界作为起点，往前去计算面积，最后一个数组元素也是如此操作
+     * 这里的右边界为一个局部峰值，在局部峰值之前的情况已经被局部峰值的情况所包括，不用重复去计算
+     *      2,1,5,6,2,3
+     * 
+     *      1 5 6 这里已经包含了 1 5 的情况了
      */
     public int largestRectangleArea2(int[] heights) {
         if (heights == null || heights.length == 0) return 0;
@@ -59,7 +64,8 @@ class LargestRectangleInHistogram {
     public int largestRectangleArea3(int[] heights) {
         if (heights == null || heights.length == 0) return 0;
 
-        Stack<Integer> stack = new Stack<>();
+        // Stack<Integer> stack = new Stack<>();
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
 
         int maxArea = 0;
 
@@ -70,7 +76,7 @@ class LargestRectangleInHistogram {
             } else {
                 // 当前遍历值是小于栈顶所指元素的值，则找到右边界，右边界则是当前遍历的值
                 int rightBorder = i;
-                // 弹出来的是要处理位置所对应的高度
+                // 弹出来的是要处理位置所对应的高度的索引
                 int cur = stack.pop();
                 // 弹出所有相等的值，因为同样高度相连的值只需要处理一个即可
                 while (!stack.isEmpty() && heights[cur] == heights[stack.peek()]) {
@@ -98,6 +104,6 @@ class LargestRectangleInHistogram {
     public static void main(String[] args) {
         LargestRectangleInHistogram solution = new LargestRectangleInHistogram();
         int[] heights = {2, 1, 1, 1, 1, 1, 5};
-        System.out.println(solution.largestRectangleArea2(heights));
+        System.out.println(solution.largestRectangleArea3(heights));
     }
 }
